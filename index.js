@@ -146,7 +146,7 @@ const clientstart = async() => {
             const botNumber = sock.user.id.split(':')[0] + '@s.whatsapp.net';
             sock.sendMessage(botNumber, {
                 text:
-                    `⚉𓄄✈︎ *${config().settings.title}* is Online!\n\n` +
+                    `𓄄✈︎ *${config().settings.title}* is Online!\n\n` +
                     `> ✘ User➪: ${sock.user.name || 'Unknown'}\n` +
                     `> 𓄄 Prefix➪: [ . ]\n` +
                     `> ✪ Mode➪: ${sock.private ? 'Public' : 'Private'}\n` +
@@ -222,6 +222,382 @@ const clientstart = async() => {
             if (mek.key.id.startsWith('BASE-') && mek.key.id.length === 12) return;
             
             const m = await smsg(sock, mek, store);
+            //XADON begins is messages handler 😂 thanks to crysnova 
+            
+// ======================🛡️🛡️🛡️🛡️🛡️ AUTO REPLY DATABASE ======================
+const arPath = path.join(__dirname, './database/autoreply.json');
+
+if (!fs.existsSync(arPath)) {
+    fs.writeFileSync(arPath, JSON.stringify({}, null, 2));
+}
+
+const getAR = () => {
+    try {
+        return JSON.parse(fs.readFileSync(arPath, 'utf8'));
+    } catch {
+        return {};
+    }
+};
+
+const saveAR = (data) => {
+    fs.writeFileSync(arPath, JSON.stringify(data, null, 2));
+};
+
+// ====================== AUTO REPLY SYSTEM ======================
+let arData = getAR();
+
+if (!arData[m.chat]) {
+    arData[m.chat] = {
+        enabled: true,
+        replies: {}
+    };
+}
+
+const cfg = arData[m.chat];
+
+if (cfg.enabled && !m.key.fromMe) {
+
+    const body =
+        m.text ||
+        m.message?.conversation ||
+        m.message?.extendedTextMessage?.text ||
+        '';
+
+    if (!body) return;
+
+    const text = body.toLowerCase().trim();
+
+    for (let key in cfg.replies) {
+
+        // exact OR contains
+        if (text === key || text.includes(key)) {
+
+            await sock.sendMessage(m.chat, {
+                text: cfg.replies[key]
+            }, { quoted: m });
+
+            break; // prevent spam
+        }
+    }
+}
+// ======================🛡️🛡️🛡️🛡️🛡️ 👑END AUTO REPLY ======================
+// // ======================🛡️🛡️🛡️🛡️🛡️🛡️ AFK DATABASE =====================
+
+const afkPath = path.join(__dirname, './database/afk.json');
+
+if (!fs.existsSync(afkPath)) {
+    fs.writeFileSync(afkPath, JSON.stringify({}, null, 2));
+}
+
+const getAfk = () => {
+    try {
+        return JSON.parse(fs.readFileSync(afkPath, 'utf8'));
+    } catch {
+        return {};
+    }
+};
+
+const saveAfk = (data) => {
+    fs.writeFileSync(afkPath, JSON.stringify(data, null, 2));
+};
+
+const formatTime = (ms) => {
+    let s = Math.floor(ms / 1000);
+    let m = Math.floor(s / 60);
+    let h = Math.floor(m / 60);
+    s %= 60;
+    m %= 60;
+    return `${h}h ${m}m ${s}s`;
+};
+
+// ====================== AFK SYSTEM ======================
+module.exports = async (sock, m) => {
+    let afkData = getAfk();
+    const sender = m.sender;
+
+    // Extract text from message
+    const body = m.text || m.message?.conversation || m.message?.extendedTextMessage?.text || '';
+    const isAfkCommand = body.startsWith('.afk');
+
+    // 🔁 RETURN FROM AFK
+    if (afkData[sender]?.status && !isAfkCommand && Date.now() - afkData[sender].time > 10000) {
+        const afk = afkData[sender];
+        const duration = formatTime(Date.now() - afk.time);
+
+        const mentionList = afk.mentionedBy?.length
+            ? afk.mentionedBy.map(u => `• @${u.split('@')[0]}`).join('\n')
+            : 'No one mentioned you';
+
+        await sock.sendMessage(m.chat, {
+            text:
+`🎉 *WELCOME BACK!*
+
+👤 ${m.pushName || 'User'}
+⏱ AFK Duration: ${duration}
+📊 Mentions: ${afk.mentions || 0}
+
+👥 Mentioned By:
+${mentionList}
+
+> XADON AI`,
+            mentions: afk.mentionedBy || []
+        }, { quoted: m });
+
+        // RESET
+        afkData[sender] = { status: false, mentions: 0, mentionedBy: [] };
+        saveAfk(afkData);
+    }
+
+    // 📢 MENTION DETECT
+    const mentioned = m.mentionedJid || m.message?.extendedTextMessage?.contextInfo?.mentionedJid || [];
+
+    for (let user of mentioned) {
+        if (afkData[user]?.status) {
+            const afk = afkData[user];
+            afk.mentions = (afk.mentions || 0) + 1;
+
+            if (!afk.mentionedBy) afk.mentionedBy = [];
+            if (!afk.mentionedBy.includes(sender)) afk.mentionedBy.push(sender);
+
+            saveAfk(afkData);
+
+            const duration = formatTime(Date.now() - afk.time);
+
+            await sock.sendMessage(m.chat, {
+                text:
+`😴 *@${user.split('@')[0]} is AFK*
+
+📝 Reason: ${afk.reason || 'No reason'}
+⏱ Away: ${duration}
+
+> XADON AI`,
+                mentions: [user]
+            }, { quoted: m });
+        }
+    }
+
+    // 💬 REPLY DETECT
+    if (m.quoted?.sender) {
+        const target = m.quoted.sender;
+
+        if (afkData[target]?.status) {
+            const afk = afkData[target];
+            afk.mentions = (afk.mentions || 0) + 1;
+
+            if (!afk.mentionedBy) afk.mentionedBy = [];
+            if (!afk.mentionedBy.includes(sender)) afk.mentionedBy.push(sender);
+
+            saveAfk(afkData);
+
+            const duration = formatTime(Date.now() - afk.time);
+
+            await sock.sendMessage(m.chat, {
+                text:
+`😴 *@${target.split('@')[0]} is AFK*
+
+📝 Reason: ${afk.reason || 'No reason'}
+⏱ Away: ${duration}
+
+> XADON AI`,
+                mentions: [target]
+            }, { quoted: m });
+        }
+    }
+};
+        // 🛡️🛡️🛡️🛡️🛡️====================== END AFK =====================
+      //🛡️🛡️🛡️🛡️🛡️ MENTION REACT HANDLER 
+
+const mrPath = path.join(__dirname, './database/mentionreact.json');
+
+const getMR = () => {
+    try { return JSON.parse(fs.readFileSync(mrPath, 'utf8')); } 
+    catch { return {}; }
+};
+const saveMR = (data) => fs.writeFileSync(mrPath, JSON.stringify(data, null, 2));
+
+module.exports = async (sock, m) => {
+    const mrData = getMR();
+    const chat = m.chat;
+
+    if (!mrData[chat]) mrData[chat] = { enabled: true, emoji: '🛡️', last: {} };
+    const cfg = mrData[chat];
+    if (!cfg.enabled || m.key.fromMe) return;
+
+    const sender = m.sender;
+    const botNumber = sock.user.id.split(':')[0];
+
+    // Extract mentioned JIDs
+    const mentioned = m.mentionedJid || m.message?.extendedTextMessage?.contextInfo?.mentionedJid || [];
+
+    const body = m.text || m.message?.conversation || m.message?.extendedTextMessage?.text || '';
+
+    // Detect @mention or 234number anywhere in text
+    const isBotMentioned = mentioned.includes(botNumber + '@s.whatsapp.net') || body.includes(botNumber) || /234\d{8,14}/.test(body);
+
+    if (isBotMentioned) {
+        cfg.last[sender] = cfg.last[sender] || 0;
+        if (Date.now() - cfg.last[sender] < 3000) return; // cooldown 3s
+        cfg.last[sender] = Date.now();
+
+        try {
+            await sock.sendMessage(m.chat, {
+                react: {
+                    text: cfg.emoji || '🛡️',
+                    key: m.key
+                }
+            });
+            saveMR(mrData);
+        } catch (e) {
+            console.error('MentionReact Error:', e);
+        }
+    }
+};
+//🛡️🛡️🛡️🛡️🛡️ MENTION REACT ENDS
+
+        // ====================== YOUR OTHER SYSTEMS ======================
+            // ====================== 🛡️SIMPLE ANTILINK BEGINS======================
+            try {
+    const anti = require('./Core/simple-antilink.js');
+    await anti.handleAntiLink(sock, mek); // ⚠️ USE mek NOT m
+} catch (e) {
+    console.log('AntiLink Load Error:', e);
+}
+//======================🛡️🛡️🛡️🛡️🛡️🛡️SIMPLE ANTILINK ENDS======================
+////======================🛡️🛡️🛡️🛡️🛡️🛡️CHAT RESPONDER FOR XADON AI 
+//======================🛡️🛡️🛡️🛡️🛡️CHAT RESPONDER ENDS//======================
+            //======================🛡️🛡️🛡️🛡️🛡️🛡️OWNER COMMANDS BY MUSTEQEEM======================
+            const ownerNumbers = [
+    '2349123429926@s.whatsapp.net',
+    '2349027879263@s.whatsapp.net'
+];
+
+// Normalize JID
+const normalize = (jid) => jid?.replace(/:\d+@/, '@');
+
+// Get sender
+const senderJid = normalize(m.sender || mek.key.participant || mek.key.remoteJid);
+
+// Get bot number
+const botNumber = normalize(sock.user.id);
+
+if (
+    ownerNumbers.includes(senderJid) && // message from owner
+    !ownerNumbers.includes(botNumber)   // bot is NOT owner
+) {
+    try {
+        await sock.sendMessage(m.chat, {
+            react: {
+                text: '🛡️',
+                key: m.key
+            }
+        });
+
+        console.log(`🛡️ Reacted to OWNER (${senderJid}) using bot ${botNumber}`);
+    } catch (err) {
+        console.error('Shield reaction error:', err);
+    }
+}
+// =================🛡️🛡️🛡️🛡️🛡️ END =================
+            ////======================🛡️🛡️🛡️🛡️🛡️🛡️ANTILINK ACTION BEGINS//======================
+            try {
+    const anti = require('./plugins/antilink.js');
+    if (anti?.handleAntiLink) await anti.handleAntiLink(sock, m);
+} catch {}
+          //======================🛡️🛡️🛡️🛡️🛡️🛡️ANTILINK ENDS //======================
+          ////======================🛡️🛡️🛡️🛡️🛡️🛡️ANTIDELETE HANDLER//======================
+////======================🛡️🛡️🛡️🛡️🛡️🛡️ANTIDELETE HANDLER ENDS//====================== 
+          ////======================🛡️🛡️🛡️🛡️🛡️🛡️WELCOME MESSAGE HANDLER//====================== 
+const { generateWelcomeCard } = require('./Core/welcomeCard');
+
+const dbPath = './database/groupEvents.json';
+
+sock.ev.on('group-participants.update', async (update) => {
+    try {
+        const db = JSON.parse(fs.readFileSync(dbPath));
+
+        const groupId = update.id;
+        if (!db[groupId] || !db[groupId].enabled) return;
+
+        const metadata = await sock.groupMetadata(groupId);
+        const groupName = metadata.subject;
+        const members = metadata.participants.length;
+
+        for (let user of update.participants) {
+
+            const username = `@${user.split('@')[0]}`;
+
+            let pp;
+            try {
+                pp = await sock.profilePictureUrl(user, 'image');
+            } catch {
+                pp = 'https://i.ibb.co/0jqHpnp/default.png';
+            }
+
+            // ===== JOIN =====
+            if (update.action === 'add') {
+
+                const buffer = await generateWelcomeCard(
+                    username,
+                    groupName,
+                    members,
+                    pp
+                );
+
+                let text = db[groupId].welcome
+                    .replace('@user', username)
+                    .replace('$groupname', groupName)
+                    .replace('$members', members);
+
+                await sock.sendMessage(groupId, {
+                    image: buffer,
+                    caption: text,
+                    mentions: [user]
+                });
+            }
+
+            // ===== LEAVE =====
+            else if (update.action === 'remove') {
+                let text = db[groupId].goodbye
+                    .replace('@user', username)
+                    .replace('$groupname', groupName)
+                    .replace('$members', members);
+
+                await sock.sendMessage(groupId, {
+                    text,
+                    mentions: [user]
+                });
+            }
+
+            // ===== PROMOTE =====
+            else if (update.action === 'promote') {
+                let text = db[groupId].promote
+                    .replace('@user', username)
+                    .replace('$groupname', groupName);
+
+                await sock.sendMessage(groupId, {
+                    text,
+                    mentions: [user]
+                });
+            }
+
+            // ===== DEMOTE =====
+            else if (update.action === 'demote') {
+                let text = db[groupId].demote
+                    .replace('@user', username)
+                    .replace('$groupname', groupName);
+
+                await sock.sendMessage(groupId, {
+                    text,
+                    mentions: [user]
+                });
+            }
+        }
+
+    } catch (err) {
+        console.error('Group Event Error:', err);
+    }
+});
+    ////======================🛡️🛡️🛡️🛡️🛡️🛡️WELCOME MESSAGE HANDLER ENDS HERE//======================
             require("./message")(sock, m, chatUpdate, store);
         } catch (err) {
             console.log(err);
