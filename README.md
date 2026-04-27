@@ -37,7 +37,7 @@ Recommended (easy & reliable):
 - [bot-hosting.net](https://bot-hosting.net)
 
 ### Step 2: Create Your Server on Spaceify Panel
-1. Go to → [panel.spaceify.eu](https://panel.spaceify.eu)  
+1. Go to → [client.spaceify.eu](https://client.spaceify.eu)  
 2. Register → Verify email → Login  
 3. Menu (☰) → **Create Server**  
    - **Name**: XADON-AI-Bot (or anything cool)  
@@ -49,7 +49,7 @@ Recommended (easy & reliable):
 Your server is now live! 🎉
 
 ### Step 3: Upload & Launch XADON AI
-1. Back to panel → Click your server name  
+1. Back to panel(panel.spaceify.eu)Login → Click your server name  
 2. Go to **Files** tab  
 3. **Upload** the XADON AI .zip file (get it from the official WA group or source)  
 4. Right-click the zip → **Unarchive**  
