@@ -1,64 +1,112 @@
-const { exec } = require('child_process');
-const fs = require('fs');
-const path = require('path');
-
 module.exports = {
-  command: 'update',
-  description: 'Premium update: bootstrap git, restore packages & restart bot',
-  category: 'owner',
-  owner: true,
+ command: 'update',
+ alias: ['pull', 'sync', 'upd'],
+ description: 'Update bot files from GitHub without deleting session/database',
+ category: 'owner',
+ usage: '.update',
 
-  execute: async (sock, m, { reply }) => {
-    const botFolder = path.resolve(__dirname, '..');
-    const repo = 'https://github.com/cybershieldquad/XADON-AI';
+ execute: async (sock, m, { reply }) => {
+ const { execSync } = require('child_process');
+ const fs = require('fs');
+ const path = require('path');
 
-    const run = (cmd) =>
-      new Promise((res, rej) => {
-        exec(cmd, { cwd: botFolder }, (err, stdout, stderr) => {
-          if (err) return rej(stderr || err.message);
-          res(stdout.trim());
-        });
-      });
+ try {
+ if (!m.key.fromMe) {
+ return reply('❌ Only bot owner can use this command\n> ֎');
+ }
 
-    try {
-      await reply('⚡ Starting premium update...');
+ await sock.sendMessage(m.chat, { react: { text: '🔄', key: m.key } });
 
-      // Step 0: Git bootstrap if missing
-      if (!fs.existsSync(path.join(botFolder, '.git'))) {
-        await reply('🛠 Git not initialized. Bootstrapping repository...');
-        await run('git init');
-        await run(`git remote add origin ${repo}`);
-        await run('git fetch origin');
-        await run('git checkout -b main origin/main || git checkout -b master origin/master');
-        await reply('✅ Git repository initialized successfully!');
-      }
+ const REPO_URL = 'https://github.com/CEOcybershieldquad/XADON-AI.git';
+ const BRANCH = 'main';
+ const ROOT = process.cwd();
+ const TMP = path.join(ROOT, '.xadon_update_tmp');
 
-      // Step 1: Set Git identity
-      await run('git config user.name "crysnovax"');
-      await run('git config user.email "carayasata1la@gmail.com"');
+ const run = (cmd) => execSync(cmd, { cwd: ROOT, stdio: 'pipe', encoding: 'utf8' });
+ const runSilent = (cmd) => { try { run(cmd); } catch {} };
 
-      // Step 2: Detect remote default branch dynamically
-      let branch = await run('git symbolic-ref refs/remotes/origin/HEAD | sed "s@refs/remotes/origin/@@g"').catch(() => 'main');
-      branch = branch.trim() || 'main';
-      await reply(`🌿 Detected branch: ${branch}`);
+ await reply(`✦ ───── ⋆⋅☆⋅⋆ ───── ✦
+ *֎ • UPDATE STARTED*
+✦ ───── ⋆⋅☆⋅⋆ ───── ✦
 
-      // Step 3: Fetch & reset
-      await reply('📥 Fetching latest commits...');
-      await run(`git fetch origin ${branch}`);
-      await run(`git reset --hard origin/${branch}`);
-      await reply('✅ Bot updated to latest commit!');
+📥 Pulling from GitHub...
+> ֎`);
 
-      // Step 4: Restore packages
-      await reply('📦 Restoring npm packages...');
-      await run('npm install');
-      await reply('🎉 Packages restored successfully!');
+ // 1. Check git
+ try {
+ run('git --version');
+ } catch {
+ throw new Error('Git not installed on panel');
+ }
 
-      // Step 5: Auto-restart
-      await reply('🔄 Restarting bot...');
-      await run('pm2 restart all || node index.js');
-      
-    } catch (err) {
-      await reply('❌ Update failed:\n' + err);
-    }
-  }
+ // 2. Clone to temp
+ if (fs.existsSync(TMP)) runSilent(`rm -rf "${TMP}"`);
+ run(`git clone --depth=1 -b ${BRANCH} ${REPO_URL} "${TMP}"`);
+
+ await reply(`🧹 Merging repo files...\nKeeping session, database, and local files\n> ֎`);
+
+ // 3. Copy everything from repo to root, overwrite existing
+ // This replaces files that exist in repo, keeps files that don't
+ const copyRecursive = (src, dest) => {
+ const stats = fs.statSync(src);
+ if (stats.isDirectory()) {
+ if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
+ fs.readdirSync(src).forEach(child => {
+ copyRecursive(path.join(src, child), path.join(dest, child));
+ });
+ } else {
+ fs.copyFileSync(src, dest);
+ }
+ };
+
+ fs.readdirSync(TMP).forEach(file => {
+ if (file === '.git') return; // Don't copy .git folder
+ const src = path.join(TMP, file);
+ const dest = path.join(ROOT, file);
+ copyRecursive(src, dest);
+ });
+
+ runSilent(`rm -rf "${TMP}"`);
+
+ await reply(`📦 Installing dependencies...\n> ֎`);
+
+ // 4. Install deps - Node 14 compatible
+ if (fs.existsSync('package.json')) {
+ run('npm install --production --no-audit');
+ }
+
+ await sock.sendMessage(m.chat, {
+ text: `✦ ───── ⋆⋅☆⋅⋆ ───── ✦
+ *֎ • UPDATE SUCCESS*
+✦ ───── ⋆⋅☆⋅⋆ ───── ✦
+
+✅ Repo files synced
+✅ session/ folder kept
+✅ database/ folder kept 
+✅ Local files preserved
+✅ Dependencies updated
+
+Restart bot to apply changes
+> ֎`
+ });
+
+ await sock.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+
+ } catch (err) {
+ console.error('[UPDATE ERROR]', err?.message || err);
+
+ let msg = '❌ Update failed\n\n';
+ if (err.message?.includes('Git not installed')) {
+ msg += '• Git not installed on panel';
+ } else if (err.message?.includes('clone')) {
+ msg += '• Failed to clone repo. Check URL/network';
+ } else if (err.message?.includes('npm')) {
+ msg += '• npm install failed';
+ } else {
+ msg += `• ${err.message}`;
+ }
+
+ reply(msg + '\n\n> ֎');
+ }
+ }
 };
