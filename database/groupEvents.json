@@ -1,1 +1,16 @@
-{}
+{
+  "120363426330519904@g.us": {
+    "enabled": true,
+    "welcome": "👋 Welcome @user\n\n🎉 You joined *$groupname*\n📊 Members: $members\n\n🕒 Joined: $time\n📅 Date: $date\n\n💬 Enjoy your stay!",
+    "goodbye": "👋 Goodbye @user\n\n❌ Left *$groupname*\n📊 Members now: $members\n\n🕒 Time: $time",
+    "promote": "🎖️ @user has been promoted to admin in *$groupname*",
+    "demote": "⚠️ @user has been demoted in *$groupname*"
+  },
+  "120363425248711962@g.us": {
+    "enabled": false,
+    "welcome": "👋 Welcome @user\n\n🎉 You joined *$groupname*\n📊 Members: $members\n\n🕒 Joined: $time\n📅 Date: $date\n\n💬 Enjoy your stay!",
+    "goodbye": "👋 Goodbye @user\n\n❌ Left *$groupname*\n📊 Members now: $members\n\n🕒 Time: $time",
+    "promote": "🎖️ @user has been promoted to admin in *$groupname*",
+    "demote": "⚠️ @user has been demoted in *$groupname*"
+  }
+}
