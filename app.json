@@ -1,0 +1,17 @@
+{
+ "name": "XADON AI",
+ "description": "Professional Ultra Defense WhatsApp bot",
+ "repository": "https://github.com/CEOcybershieldquad/XADON-AI",
+ "logo": "https://files.catbox.moe/bkvkel.jpeg",
+ "keywords": ["whatsapp", "bot", "crysnova", "ai"],
+ "buildpacks": [
+ {
+ "url": "heroku/nodejs"
+ }
+ ],
+ "formation": {
+ "worker": {
+ "quantity": 1
+ }
+ }
+}
