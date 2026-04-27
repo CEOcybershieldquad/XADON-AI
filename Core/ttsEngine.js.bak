@@ -1,0 +1,71 @@
+const fs = require('fs');
+const path = require('path');
+const axios = require('axios');
+const ffmpeg = require('fluent-ffmpeg');
+
+const tempDir = path.join(process.cwd(), 'temp');
+if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir);
+
+const LANGS = {
+    en: "tts-en",
+    ar: "tts-ar",
+    it: "tts-it",
+    es: "tts-es",
+    fr: "tts-fr",
+    el: "tts-el",
+    hi: "tts-hi"
+};
+
+async function generateTTS(sock, m, text, lang = "en") {
+
+    try {
+
+        const endpoint = LANGS[lang] || LANGS.en;
+
+        const url = `https://apis.prexzyvilla.site/tts/${endpoint}?text=${encodeURIComponent(text)}`;
+
+        const input = path.join(tempDir, Date.now() + "_tts.mp3");
+        const output = path.join(tempDir, Date.now() + "_tts.ogg");
+
+        // ✅ DOWNLOAD MP3
+        const res = await axios.get(url, {
+            responseType: "arraybuffer"
+        });
+
+        fs.writeFileSync(input, res.data);
+
+        // 🔥 CONVERT TO OGG (WHATSAPP SAFE)
+        return new Promise((resolve) => {
+
+            ffmpeg(input)
+                .audioCodec('libopus')
+                .audioBitrate('128k')
+                .format('ogg')
+                .on('end', async () => {
+
+                    await sock.sendMessage(m.chat, {
+                        audio: fs.readFileSync(output),
+                        mimetype: 'audio/ogg; codecs=opus',
+                        ptt: true
+                    }, { quoted: m });
+
+                    // cleanup
+                    fs.unlinkSync(input);
+                    fs.unlinkSync(output);
+
+                    resolve();
+                })
+                .on('error', (err) => {
+                    console.log('[TTS ERROR]', err.message);
+                    resolve();
+                })
+                .save(output);
+
+        });
+
+    } catch (err) {
+        console.log('[TTS FETCH ERROR]', err.message);
+    }
+}
+
+module.exports = { generateTTS };
