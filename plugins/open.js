@@ -14,7 +14,7 @@ module.exports = {
 🌐 Usage:.open <link> | <button text>
 
 Examples:
--.open https://crysnovax.link | Visit Site
+-.open https://xadon.link | Visit Site
 -.open https://youtube.com | Watch Video
 -.open google.com | Search
 
