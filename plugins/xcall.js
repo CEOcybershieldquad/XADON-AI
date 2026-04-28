@@ -14,7 +14,7 @@ module.exports = {
 📞 Usage:.call <number> | <text>
 
 Examples:
--.xcall 2348077528901 | Call CRYSNOVA
+-.xcall 2348077528901 | Call XADON 
 -.xcall 2348012345678 | Support
 
 💡 Tap button to start WhatsApp call
