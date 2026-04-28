@@ -1,1 +1,84 @@
-function a0_0x4a85(_0x1e821e,_0x59ad9a){_0x1e821e=_0x1e821e-0xb3;const _0x33ed62=a0_0x33ed();let _0x4a8507=_0x33ed62[_0x1e821e];return _0x4a8507;}const a0_0x203a33=a0_0x4a85;(function(_0x2b88c5,_0x1e2d37){const _0x23506a=a0_0x4a85,_0xb4b5d6=_0x2b88c5();while(!![]){try{const _0x239933=-parseInt(_0x23506a(0xbc))/0x1+-parseInt(_0x23506a(0xc7))/0x2+-parseInt(_0x23506a(0xb8))/0x3*(-parseInt(_0x23506a(0xb3))/0x4)+parseInt(_0x23506a(0xc8))/0x5*(-parseInt(_0x23506a(0xcd))/0x6)+parseInt(_0x23506a(0xc1))/0x7*(-parseInt(_0x23506a(0xb5))/0x8)+-parseInt(_0x23506a(0xce))/0x9*(parseInt(_0x23506a(0xc5))/0xa)+parseInt(_0x23506a(0xb4))/0xb;if(_0x239933===_0x1e2d37)break;else _0xb4b5d6['push'](_0xb4b5d6['shift']());}catch(_0x5e8865){_0xb4b5d6['push'](_0xb4b5d6['shift']());}}}(a0_0x33ed,0x8a744),module[a0_0x203a33(0xd7)]={'command':'demote','alias':[a0_0x203a33(0xcc)],'description':a0_0x203a33(0xd4),'category':a0_0x203a33(0xc4),'usage':a0_0x203a33(0xd8),'execute':async(_0x170120,_0xa9de2a,{args:_0x4766e9,reply:_0x505cae})=>{const _0x566468=a0_0x203a33;if(!_0xa9de2a[_0x566468(0xd3)])return _0x505cae(_0x566468(0xd1));let _0x1622ae;if(_0xa9de2a['mentionedJid']?.[_0x566468(0xbf)])_0x1622ae=_0xa9de2a[_0x566468(0xd6)][0x0];else{if(_0xa9de2a[_0x566468(0xba)])_0x1622ae=_0xa9de2a[_0x566468(0xba)][_0x566468(0xc9)];else{if(_0x4766e9[0x0]){let _0x5122da=_0x4766e9[0x0]['replace'](/[^0-9]/g,'');if(_0x5122da[_0x566468(0xbf)]<0xa)return _0x505cae(_0x566468(0xcf));_0x1622ae=_0x5122da+_0x566468(0xd5);}else return _0x505cae(_0x566468(0xc6));}}try{await _0x170120['groupParticipantsUpdate'](_0xa9de2a[_0x566468(0xbd)],[_0x1622ae],_0x566468(0xc3));const _0x3874df=_0x1622ae[_0x566468(0xd0)]('@')[0x0];await _0x170120['sendMessage'](_0xa9de2a[_0x566468(0xbd)],{'text':_0x566468(0xca)+_0x3874df+_0x566468(0xbb),'mentions':[_0x1622ae]}),await _0x170120['sendMessage'](_0xa9de2a[_0x566468(0xbd)],{'react':{'text':'📉','key':_0xa9de2a['key']}});}catch(_0x241626){console['error'](_0x566468(0xd2),_0x241626?.['message']||_0x241626);let _0x5b0567=_0x566468(0xb7);if(_0x241626[_0x566468(0xb9)]?.['includes'](_0x566468(0xcb)))_0x5b0567+=_0x566468(0xbe);else _0x241626[_0x566468(0xb9)]?.[_0x566468(0xb6)]('permission')?_0x5b0567+=_0x566468(0xc0):_0x5b0567+='•\x20'+_0x241626['message'];_0x505cae(_0x5b0567+_0x566468(0xc2));}}});function a0_0x33ed(){const _0x413014=['Demote\x20admin\x20to\x20normal\x20user','@s.whatsapp.net','mentionedJid','exports','.demote\x20@user\x20/\x20reply\x20/\x20number','4ggMByt','21977230ucqEbl','8OIaBjh','includes','❌\x20Failed\x20to\x20demote\x0a\x0a','2794131CtmhwG','message','quoted','\x20is\x20no\x20longer\x20Admin\x0a\x0a⚡\x20Demotion\x20successful\x0a\x0a>\x20XADON\x20AI','583641HQHDmj','chat','•\x20Bot\x20needs\x20admin\x20rights','length','•\x20Permission\x20denied','651266GAtCwq','\x0a>\x20XADON\x20AI','demote','group','8650zXbkTG','✨\x20✪\x20*XADON\x20AI\x20•\x20DEMOTE*\x20✪\x20✨\x0a\x0a🚫\x20Ways\x20to\x20demote:\x0a\x0a•\x20Reply\x20→\x20.demote\x0a•\x20Tag\x20→\x20.demote\x20@user\x0a•\x20Number\x20→\x20.demote\x20234xxxxxxxxxx\x0a\x0a>\x20XADON\x20AI','1128752gnxUwc','285stEkTz','sender','✦\x20─────\x20⋆⋅☆⋅⋆\x20─────\x20✦\x0a\x20\x20\x20\x20\x20\x20*XADON\x20AI\x20•\x20DEMOTION*\x0a✦\x20─────\x20⋆⋅☆⋅⋆\x20─────\x20✦\x0a\x0a🚫\x20@','admin','unadmin','83142qXGBAz','3447vVMiKF','⚠️\x20Invalid\x20number\x20format\x0a>\x20XADON\x20AI','split','❌\x20This\x20command\x20works\x20only\x20in\x20groups\x0a>\x20XADON\x20AI','[DEMOTE\x20ERROR]','isGroup'];a0_0x33ed=function(){return _0x413014;};return a0_0x33ed();}
+module.exports = {
+    command: 'demote',
+    alias: ['unadmin'],
+    description: 'Demote admin to normal user',
+    category: 'group',
+    usage: '.demote @user / reply / number',
+
+    execute: async (sock, m, { args, reply }) => {
+
+        if (!m.isGroup)
+            return reply('❌ This command works only in groups\n> XADON AI');
+
+        let target;
+
+        // Mention
+        if (m.mentionedJid?.length) {
+            target = m.mentionedJid[0];
+
+        // Reply
+        } else if (m.quoted) {
+            target = m.quoted.sender;
+
+        // Number
+        } else if (args[0]) {
+            let number = args[0].replace(/[^0-9]/g, '');
+
+            if (number.length < 10)
+                return reply('⚠️ Invalid number format\n> XADON AI');
+
+            target = number + '@s.whatsapp.net';
+
+        } else {
+            return reply(`✨ ✪ *XADON AI • DEMOTE* ✪ ✨
+
+🚫 Ways to demote:
+
+• Reply → .demote
+• Tag → .demote @user
+• Number → .demote 234xxxxxxxxxx
+
+> XADON AI`);
+        }
+
+        try {
+
+            await sock.groupParticipantsUpdate(m.chat, [target], 'demote');
+
+            const num = target.split('@')[0];
+
+            await sock.sendMessage(m.chat, {
+                text: `✦ ───── ⋆⋅☆⋅⋆ ───── ✦
+      *XADON AI • DEMOTION*
+✦ ───── ⋆⋅☆⋅⋆ ───── ✦
+
+🚫 @${num} is no longer Admin
+
+⚡ Demotion successful
+
+> XADON AI`,
+                mentions: [target]
+            });
+
+            await sock.sendMessage(m.chat, {
+                react: { text: "📉", key: m.key }
+            });
+
+        } catch (err) {
+
+            console.error('[DEMOTE ERROR]', err?.message || err);
+
+            let msg = '❌ Failed to demote\n\n';
+
+            if (err.message?.includes('admin')) {
+                msg += '• Bot needs admin rights';
+            } else if (err.message?.includes('permission')) {
+                msg += '• Permission denied';
+            } else {
+                msg += `• ${err.message}`;
+            }
+
+            reply(msg + '\n> XADON AI');
+        }
+    }
+};
