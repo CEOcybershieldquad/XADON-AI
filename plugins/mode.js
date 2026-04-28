@@ -22,7 +22,7 @@ module.exports = {
             sock.public = false;
             return reply(
                 `𓉤 *PRIVATE MODE ACTIVATED👾*\n\n` +
-                `⚉XADON Bot now only responds to it's Owners`
+                `֎XADON Bot now only responds to it's Owners`
             );
         }
         
