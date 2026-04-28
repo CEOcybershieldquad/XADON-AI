@@ -1,131 +1,121 @@
-const sharp = require('sharp');
-// Required for groupStatus to work
-const { proto } = require('@crysnovax/baileys-stable');
+const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+const { getTempDir, deleteTempFile } = require('../../utils/tempManager');
+
+const BASE = 'https://api.princetechn.com/api/anime/konachan';
+const API_KEY = 'prince';
 
 module.exports = {
- command: 'gstatus',
- alias: ['groupstatus', 'gs'],
- description: 'Post a status to the group - shows as story ring on group icon',
- category: 'admin',
- usage: '.gstatus <text> | Reply to image/video + .gstatus',
-
- execute: async (sock, m, { args, text, reply }) => {
- try {
- const quoted = m.quoted;
- const chat = m.chat;
-
- await sock.sendMessage(m.chat, { react: { text: '📸', key: m.key } });
-
- // ── Image status ──────────────────────────────────
- if (quoted && /image|webp/.test(quoted.mimetype || '')) {
- let media = await quoted.download();
- if (!media || media.length === 0) {
- await sock.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
- return reply('❌ Failed to download image\n\n> ֎');
- }
-
- // Upscale + max quality to fight WhatsApp compression
- try {
- media = await sharp(media)
- .resize({ width: 1920, height: 1080, fit: 'inside', withoutEnlargement: false })
- .jpeg({ quality: 100, chromaSubsampling: '4:4:4' })
- .toBuffer();
- } catch (e) {
- console.log('[GSTATUS] Sharp skipped:', e.message);
- }
-
- await sock.sendMessage(chat, {
- image: media,
- caption: text || '',
- groupStatus: true // Only works on @crysnovax/baileys-stable
- });
-
- await sock.sendMessage(m.chat, { react: { text: '✨', key: m.key } });
- return reply(`✦ ───── ⋆⋅☆⋅⋆ ───── ✦
- *֎ • GROUP STATUS*
-✦ ───── ⋆⋅☆⋅⋆ ───── ✦
-
-📸 Image status posted
-👥 Visible on group icon ring
-
-> ֎`);
- }
-
- // ── Video status ──────────────────────────────────
- if (quoted && /video/.test(quoted.mimetype || '')) {
- let media = await quoted.download();
- if (!media || media.length === 0) {
- await sock.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
- return reply('❌ Failed to download video\n\n> ֎');
- }
-
- await sock.sendMessage(chat, {
- video: media,
- caption: text || '',
- groupStatus: true
- });
-
- await sock.sendMessage(m.chat, { react: { text: '✨', key: m.key } });
- return reply(`✦ ───── ⋆⋅☆⋅⋆ ───── ✦
- *֎ • GROUP STATUS*
-✦ ───── ⋆⋅☆⋅⋆ ───── ✦
-
-🎥 Video status posted
-👥 Visible on group icon ring
-
-> ֎`);
- }
-
- // ── Text status ───────────────────────────────────
- if (text) {
- await sock.sendMessage(chat, {
- text: text,
- groupStatus: true
- });
-
- await sock.sendMessage(m.chat, { react: { text: '✨', key: m.key } });
- return reply(`✦ ───── ⋆⋅☆⋅⋆ ───── ✦
- *֎ • GROUP STATUS*
-✦ ───── ⋆⋅☆⋅⋆ ───── ✦
-
-📝 Text status posted
-👥 Visible on group icon ring
-
-> ֎`);
- }
-
- // Help message
- reply(`֎ ✪ *XADON AI • GROUP STATUS* ✪ ֎
-
-📸 Usage:
-- .gstatus <text>
-- Reply to image + .gstatus <caption>
-- Reply to video + .gstatus <caption>
-
-💡 Posts status visible on group icon
-⚠️ Admin only | Requires @crysnovax/baileys-stable
-
-> ֎`);
-
- } catch (err) {
-
- console.error('[GSTATUS ERROR]', err?.message || err);
-
- await sock.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
-
- let msg = '❌ Failed to post group status\n\n';
-
- if (err.message?.includes('groupStatus')) {
- msg += '• Requires @crysnovax/baileys-stable\n• Update your baileys fork';
- } else if (err.message?.includes('admin')) {
- msg += '• Bot must be admin to post status';
- } else if (err.message?.includes('not-authorized')) {
- msg += '• Missing admin permissions';
- } else {
- msg += '• ' + err.message;
- }
-
- reply(msg + '\n\n> ֎');
- }
- }
+  command: 'kch',
+  aliases: ['konachansfw'],
+  category: 'media',
+  description: 'Get random konachan anime images',
+  usage: 'konachan',
+  execute: async (sock, msg, args, extra) => {
+    try {
+      // Fetch JSON from API to get image URL
+      const url = `${BASE}?apikey=${API_KEY}`;
+      const response = await axios.get(url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0',
+          'Accept': 'application/json'
+        },
+        timeout: 30000
+      });
+      
+      // Extract image URL from response
+      if (!response.data || !response.data.result) {
+        throw new Error('Invalid API response: missing image URL');
+      }
+      
+      const imageUrl = response.data.result;
+      
+      if (!imageUrl || typeof imageUrl !== 'string') {
+        throw new Error('Invalid image URL in API response');
+      }
+      
+      // Download image from the URL
+      const imageResponse = await axios.get(imageUrl, {
+        responseType: 'arraybuffer',
+        headers: {
+          'User-Agent': 'Mozilla/5.0',
+          'Accept': 'image/*'
+        },
+        timeout: 30000
+      });
+      
+      const imageBuffer = Buffer.from(imageResponse.data);
+      
+      // Verify buffer is valid
+      if (!imageBuffer || imageBuffer.length === 0) {
+        throw new Error('Empty image response');
+      }
+      
+      // Check file size (WhatsApp image limit is 5MB)
+      const maxImageSize = 5 * 1024 * 1024; // 5MB
+      if (imageBuffer.length > maxImageSize) {
+        throw new Error(`Image too large: ${(imageBuffer.length / 1024 / 1024).toFixed(2)}MB (max 5MB)`);
+      }
+      
+      // Determine file extension from URL or content type
+      const contentType = imageResponse.headers['content-type'] || '';
+      let extension = 'jpg';
+      if (contentType.includes('png')) {
+        extension = 'png';
+      } else if (contentType.includes('jpeg')) {
+        extension = 'jpg';
+      } else if (imageUrl.match(/\.(png|jpg|jpeg)$/i)) {
+        const match = imageUrl.match(/\.(png|jpg|jpeg)$/i);
+        extension = match[1].toLowerCase();
+      }
+      
+      // Write to temp file first, then read back to ensure buffer is valid
+      const tempDir = getTempDir();
+      const timestamp = Date.now();
+      const tempImagePath = path.join(tempDir, `konachan_${timestamp}.${extension}`);
+      
+      let finalBuffer = null;
+      
+      try {
+        // Write buffer to temp file
+        fs.writeFileSync(tempImagePath, imageBuffer);
+        
+        // Read back from file to ensure buffer is properly formed
+        finalBuffer = fs.readFileSync(tempImagePath);
+        
+        if (!finalBuffer || finalBuffer.length === 0) {
+          throw new Error('Failed to read image from temp file');
+        }
+        
+        // Send the image
+        await sock.sendMessage(extra.from, {
+          image: finalBuffer
+        }, { quoted: msg });
+        
+      } finally {
+        // Cleanup temp file
+        try {
+          deleteTempFile(tempImagePath);
+        } catch (cleanupError) {
+          // Ignore cleanup errors
+        }
+      }
+      
+    } catch (error) {
+      console.error('Error in konachan command:', error);
+      
+      // Handle specific error cases
+      if (error.response?.status === 404) {
+        await extra.reply('❌ Image not found. Please try again.');
+      } else if (error.response?.status === 429) {
+        await extra.reply('❌ Rate limit exceeded. Please try again later.');
+      } else if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+        await extra.reply('❌ Request timed out. Please try again.');
+      } else {
+        await extra.reply(`❌ Failed to fetch konachan image: ${error.message}`);
+      }
+    }
+  }
 };
+
