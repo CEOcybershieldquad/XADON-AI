@@ -1,1 +1,113 @@
-function a0_0x4f5c(_0x22c101,_0x7f483e){_0x22c101=_0x22c101-0xa5;const _0x1f5946=a0_0x1f59();let _0x4f5c17=_0x1f5946[_0x22c101];return _0x4f5c17;}const a0_0x119d61=a0_0x4f5c;function a0_0x1f59(){const _0x11a30c=['code','Installed\x20packages:','.npm\x20install\x20<pkg>\x20\x20\x20\x20\x20\x20\x20→\x20install\x0a','stdout','trim','*Musteqeem\x20MD*\x20:\x20Manage\x20npm\x20packages\x20with\x20XADON\x20(owner\x20only)','Unknown\x20error','Uninstalling...','Funding\x20links:','audit','exports','\x0aExit\x20code:\x20','Fetching\x20funding\x20info...','npm\x20uninstall\x20','stderr','npm\x20fund','Installed!','263224ZciyoA','Failed:\x0a','toLowerCase','npm\x20list\x20--depth=0','.npm\x20update\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20→\x20update\x20all\x0a','624EbVyAa','npm','.npm\x20uninstall\x20<pkg>\x20\x20\x20\x20\x20→\x20remove\x0a','system','908022rfEbtr','npm\x20update\x20','util','Updated!','(vulnerabilities\x20found,\x20but\x20no\x20detailed\x20output)','promisify','pkgs','/home/container','Uninstalled!','install','\x0a```\x0a','key','slice','.npm\x20list\x20/\x20.pkgs\x20\x20\x20\x20\x20\x20\x20\x20→\x20list\x20installed\x0a','list','\x0a(truncated)','243hqgpkp','1222896BIjggM','Fetching\x20list...','1365180QlOLHY','length','npm\x20audit\x20--json','fund','258924MlKVBA','chat','Commands:\x0a','Running...','Installing...','4685ooGTke','npm\x20update','Scanning\x20vulnerabilities...','Owner\x20only\x20command','\x0a```','\x0aOutput:\x20','5286372hGiZGa','.npm\x20fund\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20→\x20funding\x20links','npm\x20install\x20','join','substring','Vulnerabilities\x20found\x20(normal):\x0a```\x0a','child_process'];a0_0x1f59=function(){return _0x11a30c;};return a0_0x1f59();}(function(_0xce7a1d,_0x11a7de){const _0x65ed2f=a0_0x4f5c,_0x397569=_0xce7a1d();while(!![]){try{const _0x54a973=parseInt(_0x65ed2f(0xaf))/0x1+-parseInt(_0x65ed2f(0xab))/0x2+parseInt(_0x65ed2f(0xa9))/0x3+parseInt(_0x65ed2f(0xd7))/0x4*(parseInt(_0x65ed2f(0xb4))/0x5)+parseInt(_0x65ed2f(0xdb))/0x6+-parseInt(_0x65ed2f(0xba))/0x7+-parseInt(_0x65ed2f(0xd2))/0x8*(-parseInt(_0x65ed2f(0xa8))/0x9);if(_0x54a973===_0x11a7de)break;else _0x397569['push'](_0x397569['shift']());}catch(_0x3521d4){_0x397569['push'](_0x397569['shift']());}}}(a0_0x1f59,0x653c4));const {exec}=require(a0_0x119d61(0xc0)),util=require(a0_0x119d61(0xdd)),execPromise=util[a0_0x119d61(0xe0)](exec);module[a0_0x119d61(0xcb)]={'command':a0_0x119d61(0xd8),'description':a0_0x119d61(0xc6),'category':a0_0x119d61(0xda),'execute':async(_0x406a53,_0x4e1344,{reply:_0x322c75,isCreator:_0x1e1525,text:_0x38537b})=>{const _0x103a0a=a0_0x119d61;if(!_0x1e1525)return await _0x406a53['sendMessage'](_0x4e1344[_0x103a0a(0xb0)],{'react':{'text':'🔒','key':_0x4e1344[_0x103a0a(0xe6)]}}),_0x322c75(_0x103a0a(0xb7));if(!_0x38537b)return _0x322c75(_0x103a0a(0xb1)+_0x103a0a(0xc3)+_0x103a0a(0xd9)+_0x103a0a(0xa5)+_0x103a0a(0xd6)+'.npm\x20update\x20<pkg>\x20\x20\x20\x20\x20\x20\x20\x20→\x20update\x20specific\x0a'+'.npm\x20audit\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20→\x20security\x20scan\x0a'+_0x103a0a(0xbb));const _0x345eec=_0x38537b['trim']()['split'](/\s+/),_0x1dd607=_0x345eec[0x0][_0x103a0a(0xd4)]();let _0x38cfcb='',_0x545840=_0x103a0a(0xb2),_0x2e3c68='';switch(_0x1dd607){case _0x103a0a(0xe4):if(_0x345eec['length']<0x2)return _0x322c75('Missing\x20package');_0x38cfcb=_0x103a0a(0xbc)+_0x345eec[_0x103a0a(0xe7)](0x1)[_0x103a0a(0xbd)]('\x20'),_0x545840=_0x103a0a(0xb3),_0x2e3c68=_0x103a0a(0xd1);break;case'uninstall':case'remove':if(_0x345eec[_0x103a0a(0xac)]<0x2)return _0x322c75('Missing\x20package');_0x38cfcb=_0x103a0a(0xce)+_0x345eec[_0x103a0a(0xe7)](0x1)[_0x103a0a(0xbd)]('\x20'),_0x545840=_0x103a0a(0xc8),_0x2e3c68=_0x103a0a(0xe3);break;case _0x103a0a(0xa6):case _0x103a0a(0xe1):_0x38cfcb=_0x103a0a(0xd5),_0x545840=_0x103a0a(0xaa),_0x2e3c68=_0x103a0a(0xc2);break;case'update':_0x38cfcb=_0x345eec[_0x103a0a(0xac)]===0x1?_0x103a0a(0xb5):_0x103a0a(0xdc)+_0x345eec[_0x103a0a(0xe7)](0x1)[_0x103a0a(0xbd)]('\x20'),_0x545840='Updating...',_0x2e3c68=_0x103a0a(0xde);break;case _0x103a0a(0xca):_0x38cfcb=_0x103a0a(0xad),_0x545840=_0x103a0a(0xb6),_0x2e3c68='Security\x20audit:';break;case _0x103a0a(0xae):_0x38cfcb=_0x103a0a(0xd0),_0x545840=_0x103a0a(0xcd),_0x2e3c68=_0x103a0a(0xc9);break;default:return _0x322c75('Unknown\x20command');}await _0x322c75(_0x545840+'\x0a`'+_0x38cfcb+'`');try{const {stdout:_0x190635,stderr:_0xd64d0a}=await execPromise(_0x38cfcb,{'cwd':_0x103a0a(0xe2)});let _0x30a1c1=(_0x190635+_0xd64d0a)[_0x103a0a(0xc5)]();if(_0x30a1c1[_0x103a0a(0xac)]>0xdac)_0x30a1c1=_0x30a1c1[_0x103a0a(0xbe)](0x0,0xd48)+_0x103a0a(0xa7);if(!_0x30a1c1)_0x30a1c1='Success\x20(no\x20output)';await _0x322c75(_0x2e3c68+_0x103a0a(0xe5)+_0x30a1c1+'\x0a```');}catch(_0x4b7a81){if(_0x1dd607===_0x103a0a(0xca)&&_0x4b7a81[_0x103a0a(0xc1)]===0x1){let _0x43308a=(_0x4b7a81['stdout']||'')+(_0x4b7a81[_0x103a0a(0xcf)]||'');_0x43308a=_0x43308a[_0x103a0a(0xc5)]();if(_0x43308a[_0x103a0a(0xac)]>0xdac)_0x43308a=_0x43308a[_0x103a0a(0xbe)](0x0,0xd48)+_0x103a0a(0xa7);if(!_0x43308a)_0x43308a=_0x103a0a(0xdf);await _0x322c75(_0x103a0a(0xbf)+_0x43308a+_0x103a0a(0xb8));}else{let _0x4a1db1=_0x4b7a81['message']||_0x103a0a(0xc7);if(_0x4b7a81['code'])_0x4a1db1+=_0x103a0a(0xcc)+_0x4b7a81['code'];if(_0x4b7a81['stdout'])_0x4a1db1+=_0x103a0a(0xb9)+_0x4b7a81[_0x103a0a(0xc4)][_0x103a0a(0xbe)](0x0,0x3e8);await _0x322c75(_0x103a0a(0xd3)+_0x4a1db1);}}}};
+const { exec } = require('child_process');
+const util = require('util');
+const execPromise = util.promisify(exec);
+
+module.exports = {
+  command: 'npm',
+  description: '*Musteqeem MD* : Manage npm packages with XADON (owner only)',
+  category: 'system',
+
+  execute: async (sock, m, { reply, isCreator, text }) => {
+    if (!isCreator) {
+      await sock.sendMessage(m.chat, { react: { text: '🔒', key: m.key } });
+      return reply('Owner only command');
+    }
+
+    if (!text) {
+      return reply(
+        'Commands:\n' +
+        '.npm install <pkg>       → install\n' +
+        '.npm uninstall <pkg>     → remove\n' +
+        '.npm list / .pkgs        → list installed\n' +
+        '.npm update              → update all\n' +
+        '.npm update <pkg>        → update specific\n' +
+        '.npm audit               → security scan\n' +
+        '.npm fund                → funding links'
+      );
+    }
+
+    const args = text.trim().split(/\s+/);
+    const subCmd = args[0].toLowerCase();
+
+    let cmd = '';
+    let workingMsg = 'Running...';
+    let successMsg = '';
+
+    switch (subCmd) {
+      case 'install':
+        if (args.length < 2) return reply('Missing package');
+        cmd = 'npm install ' + args.slice(1).join(' ');
+        workingMsg = 'Installing...';
+        successMsg = 'Installed!';
+        break;
+
+      case 'uninstall':
+      case 'remove':
+        if (args.length < 2) return reply('Missing package');
+        cmd = 'npm uninstall ' + args.slice(1).join(' ');
+        workingMsg = 'Uninstalling...';
+        successMsg = 'Uninstalled!';
+        break;
+
+      case 'list':
+      case 'pkgs':
+        cmd = 'npm list --depth=0';
+        workingMsg = 'Fetching list...';
+        successMsg = 'Installed packages:';
+        break;
+
+      case 'update':
+        cmd = args.length === 1 ? 'npm update' : 'npm update ' + args.slice(1).join(' ');
+        workingMsg = 'Updating...';
+        successMsg = 'Updated!';
+        break;
+
+      case 'audit':
+        cmd = 'npm audit --json';
+        workingMsg = 'Scanning vulnerabilities...';
+        successMsg = 'Security audit:';
+        break;
+
+      case 'fund':
+        cmd = 'npm fund';
+        workingMsg = 'Fetching funding info...';
+        successMsg = 'Funding links:';
+        break;
+
+      default:
+        return reply('Unknown command');
+    }
+
+    await reply(workingMsg + '\n`' + cmd + '`');
+
+    try {
+      const { stdout, stderr } = await execPromise(cmd, { cwd: '/home/container' });
+
+      let output = (stdout + stderr).trim();
+
+      if (output.length > 3500) output = output.substring(0, 3400) + '\n(truncated)';
+
+      if (!output) output = 'Success (no output)';
+
+      await reply(successMsg + '\n```\n' + output + '\n```');
+
+    } catch (err) {
+      // Special handling for audit (exit 1 = vulnerabilities found = normal)
+      if (subCmd === 'audit' && err.code === 1) {
+        let output = (err.stdout || '') + (err.stderr || '');
+        output = output.trim();
+
+        if (output.length > 3500) output = output.substring(0, 3400) + '\n(truncated)';
+
+        if (!output) output = '(vulnerabilities found, but no detailed output)';
+
+        await reply('Vulnerabilities found (normal):\n```\n' + output + '\n```');
+      } else {
+        let errMsg = err.message || 'Unknown error';
+        if (err.code) errMsg += '\nExit code: ' + err.code;
+        if (err.stdout) errMsg += '\nOutput: ' + err.stdout.substring(0, 1000);
+        await reply('Failed:\n' + errMsg);
+      }
+    }
+  }
+};
