@@ -7,7 +7,7 @@ const {
     proto,
     getContentType,
     areJidsSameUser
-} = require("@whiskeysockets/baileys")
+} = require("@itsliaaa/baileys")
 
 const smsg = async (sock, m, store) => {
     if (!m) return m
