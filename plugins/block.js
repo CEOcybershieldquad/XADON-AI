@@ -1,90 +1,58 @@
-// commands/general/block.js
-// .block   → block the replied user or mentioned user
-// .unblock → unblock
-
 module.exports = {
-    command: 'block',
-    aliases: ['blk', 'banuser', 'blockuser'],
-    description: 'Block or unblock a user (replied or mentioned)',
-    category: 'owner',
+ command: 'block',
+ alias: ['blockuser'],
+ description: 'Block a user',
+ category: 'moderation',
+ usage: '.block <reply|@user|number>',
 
-    execute: async (sock, m, { args, text, reply }) => {
-        // Get target user (replied or mentioned)
-        let targetJid = null;
+ execute: async (sock, m, { args, reply }) => {
+ await sock.sendMessage(m.chat, { react: { text: '🚫', key: m.key } });
 
-        if (m.quoted) {
-            targetJid = m.quoted.sender;
-        } else if (m.mentionedJid?.length > 0) {
-            targetJid = m.mentionedJid[0];
-        }
+ let targetJid = null;
 
-        if (!targetJid) {
-            return reply("Reply to a message or mention someone to block/unblock.");
-        }
+ if (m.quoted) {
+ targetJid = m.quoted.sender || m.quoted.participant || m.quoted.key?.participant;
+ } else if (m.mentionedJid?.length) {
+ targetJid = m.mentionedJid[0];
+ } else if (args[0]) {
+ const n = args[0].replace(/[^0-9]/g, '');
+ targetJid = `${n}@s.whatsapp.net`;
+ }
 
-        const action = m.text.toLowerCase().startsWith('.unblock') ? 'unblock' : 'block';
+ if (!targetJid) {
+ return reply(`֎ ✪ *XADON AI • BLOCK* ✪ ֎
 
-        try {
-            if (action === 'block') {
-                await sock.updateBlockStatus(targetJid, 'block');
-                actionText = "BLOCKED";
-                emoji = "🚫";
-            } else {
-                await sock.updateBlockStatus(targetJid, 'unblock');
-                actionText = "UNBLOCKED";
-                emoji = "✅";
-            }
+🌐 Usage:.block <reply|@user|number>
 
-            // Beautiful neon confirmation menu
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('en-US', { 
-                hour12: false, 
-                timeZone: 'Africa/Lagos' 
-            });
-            const dateStr = now.toLocaleDateString('en-US', {
-                weekday: 'long',
-                month: 'short',
-                day: 'numeric'
-            }).toUpperCase();
+Examples:
+-.block [reply to message]
+-.block @user
+-.block 2348012345678
 
-            const menu = `✦ ───── ⋆⋅☆⋅⋆ ───── ✦
-       *XADON AI  •  USER ${actionText}*
+💡 Block someone from contacting you
+
+> ֎`)
+ }
+
+ try {
+ await sock.updateBlockStatus(targetJid, 'block');
+ await sock.sendMessage(m.chat, { react: { text: '✨', key: m.key } });
+ return reply(`✦ ───── ⋆⋅☆⋅⋆ ───── ✦
+*֎ • USER BLOCKED*
 ✦ ───── ⋆⋅☆⋅⋆ ───── ✦
 
-┌──────────────────────────────┐
-│  Action completed            │
-│                              │
-│  User: @${targetJid.split('@')[0]}     │
-│  Status: ${actionText}         │
-│                              │
-│  Time: ${timeStr} WAT        │
-│  Date: ${dateStr}            │
-│                              │
-│  Created by Musteqeem ✨      │
-└──────────────────────────────┘
+✅ Successfully blocked
 
-> User ${actionText.toLowerCase()} • No more interaction ${emoji}`;
+❏◦ JID: ${targetJid}
 
-            await sock.sendMessage(m.chat, {
-                text: menu,
-                mentions: [targetJid]
-            }, { quoted: m });
+> ֎`)
+ } catch (err) {
+ await sock.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+ return reply(`֎ ✪ *XADON AI • ERROR* ✪ ֎
 
-            // Reaction
-            await sock.sendMessage(m.chat, {
-                react: { text: emoji, key: m.key }
-            });
+❌ Failed: ${err.message}
 
-        } catch (err) {
-            console.error("Block error:", err.message || err);
-
-            let errMsg = "⚠️ Failed to block/unblock user.";
-
-            if (err.message?.includes("not found")) {
-                errMsg = "User not found or invalid.";
-            }
-
-            await reply(errMsg);
-        }
-    }
-};
+> ֎`)
+ }
+ }
+}
